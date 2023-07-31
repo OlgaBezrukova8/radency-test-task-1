@@ -1,7 +1,7 @@
-import notesContent from "./notes-content.js";
+import notesContent from "./data/notes-content.js";
 
-let notesData = []; // TODO: consider avoiding let in filling data
-let archivedNotesData = []; // TODO: consider avoiding let in filling data
+let notesData = [];
+let archivedNotesData = [];
 
 export function initData() {
   notesData = notesContent;
@@ -29,12 +29,10 @@ export function unarchiveNote(noteId) {
 
 export function deleteArchivedNote(noteId) {
   archivedNotesData = archivedNotesData.filter((note) => note.id !== noteId);
-  // todo: move to a sep func
 }
 
 export function deleteNote(noteId) {
   notesData = notesData.filter((note) => note.id !== noteId);
-  // todo: move to a sep func
 }
 
 export function editNote(noteId, updatedName, updatedContent, updatedCategory) {
