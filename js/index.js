@@ -12,10 +12,10 @@ import {
   deleteNote,
   editNote,
 } from "./data.js";
-import categoriesName from "./notes-categories.js";
+import categoriesName from "./data/notes-categories.js";
 
 const $refs = {
-  container: document.getElementById("root"),
+  container: document.querySelector("#root"),
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -38,11 +38,27 @@ function render() {
 function onAddNote() {
   try {
     const name = prompt("Enter the note name:");
+    if (!name) {
+      alert("Wrong input format");
+      return;
+    }
+
     const content = prompt("Enter the note content:");
+    if (!content) {
+      alert("Wrong input format");
+      return;
+    }
+
     const category = prompt(
       "Enter the note category (Task, Random Thought, Idea):"
     );
-    if (!content || !category) return;
+    if (!category) {
+      alert("Wrong input format");
+      return;
+    } else if (!categoriesName.includes(category)) {
+      alert("Category is not exist");
+      return;
+    }
 
     const time = new Date();
     const newNote = {
@@ -55,8 +71,7 @@ function onAddNote() {
 
     addNote(newNote);
   } catch (error) {
-    //   document.getElementById("root").innerHTML = err.message;
-    // adddlert("Wrong prompt");
+    alert(`Exception occurred. ${error.message}`);
   }
   render();
 }
@@ -90,29 +105,44 @@ function onEditNote(event) {
   const noteId = parseInt(event.target.dataset.noteId);
 
   const updatedName = prompt("Edit the note name:");
+  if (!updatedName) {
+    alert("Wrong input format");
+    return;
+  }
+
   const updatedContent = prompt("Edit the note content:");
+  if (!updatedContent) {
+    alert("Wrong input format");
+    return;
+  }
+
   const updatedCategory = prompt(
     "Edit the note category (Task, Random Thought, Idea):"
   );
+  if (!updatedCategory) {
+    alert("Wrong input format");
+    return;
+  } else if (!categoriesName.includes(updatedCategory)) {
+    alert("Category is not exist");
+    return;
+  }
 
-  //   if (!categoriesName.find(updatedContent)) {
-  //     return;
-  //   }
   editNote(noteId, updatedName, updatedContent, updatedCategory);
-  // todo: add try catch, add check if bode is empry, add check if category is unsupported,
-  // etc.
-
   render();
 }
 
 document.addEventListener("click", (event) => {
-  if (event.target.classList.contains("archive-btn")) {
-    onArchiveNote(event);
-  } else if (event.target.classList.contains("unarchive-btn")) {
-    onUnarchiveNote(event);
-  } else if (event.target.classList.contains("delete-btn")) {
-    onDeleteNote(event);
-  } else if (event.target.classList.contains("edit-btn")) {
-    onEditNote(event);
+  try {
+    if (event.target.classList.contains("archive-btn")) {
+      onArchiveNote(event);
+    } else if (event.target.classList.contains("unarchive-btn")) {
+      onUnarchiveNote(event);
+    } else if (event.target.classList.contains("delete-btn")) {
+      onDeleteNote(event);
+    } else if (event.target.classList.contains("edit-btn")) {
+      onEditNote(event);
+    }
+  } catch (error) {
+    alert(`Exception occurred. ${error.message}`);
   }
 });
